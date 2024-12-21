@@ -22,6 +22,9 @@ class ShipmentDetails(BaseModel):
     weather_conditions: str
     traffic_conditions: str
 
+# load dataset
+df = pd.read_csv('data\\freight_delivery_realistic_data.csv')
+
 @app.get('/')
 def root():
     return {'message': "Hello world :)"}
@@ -33,12 +36,16 @@ def predict(details: ShipmentDetails):
     shipment_day, shipment_month, _ = details.shipment_date.split('-')
     planned_day, planned_month, _ = details.planned_delivery_date.split('-')
     actual_day, actual_month, _ = details.actual_delivery_date.split('-')
-
+    
     # Label Encoding
-    origin_counts = {"Hyderabad": 0, "Ahmedabad": 1}  # Replace with your data
-    destination_counts = {"Hyderabad": 0, "Ahmedabad": 1}  # Replace with your data
-    origin_encoded = origin_counts.get(details.origin, -1)
-    destination_encoded = destination_counts.get(details.destination, -1)
+    origin_cities = df['Origin'].value_counts()
+    origin_cities_rank = { city : i  for i, city in enumerate(origin_cities.index)}
+    
+    destination_cities = df['Destination'].value_counts()
+    destination_cities_rank = { city : i for i, city in enumerate(destination_cities.index)}
+
+    origin_encoded = origin_cities_rank.get(details.origin, -1)
+    destination_encoded = destination_cities_rank.get(details.destination, -1)
 
     # Distance Binning
     bins = [650, 1102, 1551, 2000]
@@ -62,6 +69,7 @@ def predict(details: ShipmentDetails):
         'Actual Delivery Day', 'Actual Delivery Month',
         'Origin_rank', 'Destination_rank', 'Distance Group'
     ]
+    
     features = [vehicle_type_encoded, weather_condition_encoded, traffic_condition_encoded, 
                 int(shipment_day), int(shipment_month), int(planned_day), int(planned_month), 
                 int(actual_day), int(actual_month), origin_encoded, destination_encoded, distance]

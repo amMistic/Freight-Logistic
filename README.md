@@ -1,5 +1,9 @@
 # Freight Logistic Shipment Delay Prediction 🚚
 
+<div style="display: center; justify-content: space-between;">
+  <img src="https://github.com/user-attachments/assets/83224221-6bd1-4017-a76a-a4a357b5e6f2" alt="Image 1" style="width: 85%;">
+</div>
+
 This project predicts whether a shipment will be **Delayed** or **On Time** based on various input factors such as origin, destination, vehicle type, weather, and traffic conditions.
 
 ## Features

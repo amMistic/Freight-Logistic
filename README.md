@@ -74,4 +74,3 @@ streamlit run app.py
 ```
 
 - Streamlit will run on `http://localhost:8501`.
-- 
